@@ -38,6 +38,7 @@ function calculateTotalPrice(cart, taxRate) {
  */
 function sendNotification(message) {
     console.log(`Notification envoyée : ${message}`);
+    return `Notification envoyée : ${message}`;
 }
 
 /**
