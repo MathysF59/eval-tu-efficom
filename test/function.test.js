@@ -117,3 +117,40 @@ describe('When I process purchase of cart after calculating total price and noti
         }
     });
 });
+
+describe('When I generate a random password based on length and complexity required', () => {
+    test('if the length is not a number, then I should get an error', () => {
+        try{
+            let result = generatePassword("t", {uppercase: true, numbers: false, specialChars: true});
+        }
+        catch(e){
+            expect(e).not.toBeNull(); 
+            expect(e.message).toBe("Length must be a number greater than or equal to 6");
+        }
+    });
+    
+    test('if the length is less than 6, then I should get an error', () => {
+        try{
+            let result = generatePassword(4, {uppercase: true, numbers: false, specialChars: true});
+        }
+        catch(e){
+            expect(e).not.toBeNull(); 
+            expect(e.message).toBe("Length must be a number greater than or equal to 6");
+        }
+    });
+    
+    test('if all the options are disabled, then I should get an error', () => {
+        try{
+            let result = generatePassword(6, {uppercase: false, numbers: false, specialChars: false});
+        }
+        catch(e){
+            expect(e).not.toBeNull(); 
+            expect(e.message).toBe("At least one character type must be enabled");
+        }
+    });
+    
+    test('if I generate a password with a lenght equal or superior to 6, with at least one option activated, then I should get a password', () => {
+        let result = generatePassword(41, {uppercase: true, numbers: false, specialChars: true});
+        expect(result).not.toBeNull();
+    });
+});
