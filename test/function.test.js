@@ -1,5 +1,4 @@
 const { isEven, calculateTotalPrice, processPurchase, sendNotification, generatePassword } = require("./../src/function.js");
-
 describe('When I check if a number is even or odd', () => {
     test('if the parameter is not a number, then I should get an error', () => {
         try{
@@ -62,6 +61,59 @@ describe('When I calculate the total price of a cart, with tax added', () => {
         }
     });
     test('if the price is an integer, positive', () => {
-        expect(calculateTotalPrice([4, 5], 0.2)).toEqual(10.8);
+        expect(calculateTotalPrice([4, 5], 1.4)).toEqual(21.6);
+    });
+});
+
+describe('When I send a notification in the console', () => {
+    test('if I send a notification "Hello" in the console, then I should see "Notification envoyée : Hello" in the console', () => {
+        console.log = jest.fn();
+        sendNotification("Hello");
+        expect(console.log).toHaveBeenCalledWith("Notification envoyée : Hello");
+    });
+});
+
+describe('When I process purchase of cart after calculating total price and notificate it in the console', () => {
+    test('if the cart is a array of positive prices and the taxRate is postive, then I should get the total price and a notification in the console', () => {
+        console.log = jest.fn();
+        expect(processPurchase([4, 5], 1.4)).toEqual(21.6);
+        expect(console.log).toHaveBeenCalledWith("Notification envoyée : Votre total est de 21.60 €");
+    });
+
+    test('if the cart is not an array, then I should get an error', () => {
+        try{
+            let totalPrice = calculateTotalPrice(4, 0.2);
+        }
+        catch(e){
+            expect(e).not.toBeNull(); 
+            expect(e.message).toBe("Prices must be an array");
+        }
+    });
+    test('if the tax rate is not a number, then I should get an error', () => {
+        try{
+            let totalPrice = calculateTotalPrice([4, 5], "t");
+        }
+        catch(e){
+            expect(e).not.toBeNull(); 
+            expect(e.message).toBe("Tax rate must be a number");
+        }
+    });
+    test('if the price is not a number, then I should get an error', () => {
+        try{
+            let totalPrice = calculateTotalPrice([4, "t"], 0.2);
+        }
+        catch(e){
+            expect(e).not.toBeNull(); 
+            expect(e.message).toBe("Each price must be a non-negative number");
+        }
+    });
+    test('if the price is negative, then I should get an error', () => {
+        try{
+            let totalPrice = calculateTotalPrice([4, -5], 0.2);
+        }
+        catch(e){
+            expect(e).not.toBeNull(); 
+            expect(e.message).toBe("Each price must be a non-negative number");
+        }
     });
 });
